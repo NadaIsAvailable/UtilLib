@@ -19,58 +19,59 @@
 
 let intervalId;
 let curIndex = 0;
+// ** path may need to be adjusted based on your project structure **
+const imageDirPath = 'media/images/projects/';
 const curImgList = formatImageData(rawData);
+const imgCount = curImgList.length;
 
 // Select the rotate buttons from the DOM with their IDs (prev-image and next-image)
-const prevButton = document.querySelector('#prev-image');
-const nextButton = document.querySelector('#next-image');
+const leftBtn = document.querySelector('#prev-image');
+const rightBtn = document.querySelector('#next-image');
 
 const rotateImage = (imgElement, dir = 'right') => {
-    if (dir === 'left') {
-        curIndex = (curIndex + 2) % 3;
-    }
-    else if (dir === 'right') {
-        curIndex = (curIndex - 2 + 3) % 3;
-    }
+    // Calculate the next index based on the direction
+    let step = dir === 'left' ? 1 : -1;
+    curIndex = (curIndex + step + imgCount) % imgCount;
 
-    // ** path may need to be adjusted based on your project structure **
-    imgElement.src = `media/images/projects/${curImgList[curIndex][0]}`;
+    // Set the image source and alt text
+    imgElement.src = `${imageDirPath}${curImgList[curIndex][0]}`;
     imgElement.alt = curImgList[curIndex][1];
 
+    // Clear the previous interval and set a new one
     clearInterval(intervalId);
     intervalId = setInterval(rotateImage, 3000, imgElement, dir);
 }
 
-if (curImgList.length === 1) {
-    console.log('Only one image');
+if (imgCount === 1) {
     // If there is only one image, hide the rotate buttons
-    prevButton.classList.add('hidden');
-    nextButton.classList.add('hidden');
+    leftBtn.classList.add('hidden');
+    rightBtn.classList.add('hidden');
 
     // Set the image to the only image
     const imgElement = document.querySelector('#project-image');
-    // ** path may need to be adjusted based on your project structure **
-    imgElement.src = `media/images/projects/${curImgList[0][0]}`;
+    imgElement.src = `${imageDirPath}${curImgList[0][0]}`;
     imgElement.alt = curImgList[0][1];
 } else {
     // Show the rotate buttons
-    prevButton.classList.remove('hidden');
-    nextButton.classList.remove('hidden');
+    leftBtn.classList.remove('hidden');
+    rightBtn.classList.remove('hidden');
 
     // If there are multiple images, set the first image
-    curIndex = curImgList.length - 1;
+    // and set the current index to the last image so that when
+    // the rotation starts, it will show the first image
+    curIndex = imgCount - 1;
 
     // and start the rotation
     rotateImage(document.querySelector('#project-image'));
 }
 
 // Add event listener to the rotate buttons
-prevButton.addEventListener('click', () => {
-    // Rotate the image to the left
-    rotateImage(document.querySelector('#project-image'), 'left');
+leftBtn.addEventListener('click', () => {
+    // Show the next left image
+    rotateImage(document.querySelector('#project-image'), 'right');
 });
 
-nextButton.addEventListener('click', () => {
-    // Rotate the image to the right
-    rotateImage(document.querySelector('#project-image'), 'right');
+rightBtn.addEventListener('click', () => {
+    // Show the next right image
+    rotateImage(document.querySelector('#project-image'), 'left');
 });
