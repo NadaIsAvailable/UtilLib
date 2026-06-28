@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Liquid Glass Grid Effect</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                background-color: #121214;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            }
+
+            .card {
+                position: relative;
+                width: 340px;
+                height: 440px;
+                background: #ffffff;
+                border-radius: 24px;
+                overflow: hidden;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+                display: flex;
+                flex-direction: column;
+            }
+
+            .card-header h2 {
+                font-size: 16px;
+                font-weight: 700;
+                color: #1a1a1a;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+            }
+
+            .card-header p {
+                font-size: 13px;
+                color: #666;
+                margin-top: 2px;
+            }
+
+            .glass-art-container {
+                position: relative;
+                flex-grow: 1;
+                border-radius: 16px;
+                overflow: hidden;
+                width: 100%;
+
+                transform: translateZ(0); 
+                -webkit-mask-image: -webkit-radial-gradient(white, black);
+            }
+
+            .gradient-background {
+                position: absolute;
+                top: 30%;
+                left: 0;
+                width: 100%;
+                height: 70%;
+                
+                background: radial-gradient(circle at 50% 70%, #ff3f35 0%, #ffb174 45%, #ffffff 85%);
+                filter: blur(20px);
+                z-index: 1;
+            }
+
+            .glass-grid {
+                position: absolute;
+                top: 20%;
+                left: 0;
+                width: 100%;
+                height: 80%;
+                z-index: 2;
+                
+                display: grid;
+                grid-template-columns: repeat(10, 1fr);
+                grid-template-rows: repeat(10, 1fr);
+                gap: 2px;
+                padding: 2px;
+                background: rgba(255, 255, 255, 0.15);
+            }
+
+            .glass-tile {
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                border-radius: 5px;
+                border: 1px solid rgba(255, 255, 255, 0.4);
+                box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2), 
+                            inset -1px -1px 2px rgba(0, 0, 0, 0.05);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <div class="glass-art-container">
+                <div class="gradient-background"></div>
+                
+                <div class="glass-grid" id="grid"></div>
+            </div>
+        </div>
+
+        <script>
+            const grid = document.getElementById('grid');
+            const totalTiles = 10 * 10;
+
+            for (let i = 0; i < totalTiles; i++) {
+                const tile = document.createElement('div');
+                tile.classList.add('glass-tile');
+                grid.appendChild(tile);
+            }
+        </script>
+    </body>
+</html>
